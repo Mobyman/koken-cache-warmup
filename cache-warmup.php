@@ -18,7 +18,7 @@ if ('cli' !== php_sapi_name()) {
 $rootDir = dirname(__FILE__);
 
 // List of Koken internal images formats names
-$formats = array('tiny', 'tiny.2x', 'small', 'small.2x', 'medium', 'medium.2x', 'medium_large', 'medium_large.2x', 'large', 'large.2x', 'xlarge', 'xlarge.2x', 'huge', 'huge.2x');
+$formats = ['small', 'large'];
 
 // Your website URL "http://www.xxxxxxxxx.com" (with no trailing slash)
 $publicURL = '';
@@ -39,7 +39,7 @@ if (!file_exists($databaseConfigFile)) {
 	exit(1);
 }
 
-require($databaseConfigFile);
+$KOKEN_DATABASE = require_once($databaseConfigFile);
 
 try {
     $pdo = new PDO(sprintf('mysql:dbname=%s;host=%s', $KOKEN_DATABASE['database'], $KOKEN_DATABASE['hostname']), $KOKEN_DATABASE['username'], $KOKEN_DATABASE['password']);
@@ -83,7 +83,7 @@ while ($image = $imageQueryStatement->fetch(PDO::FETCH_ASSOC)) {
     printf("%5.1f%% - %s ", $i * 100 / $imagesCount, $fileBasename);
 
     foreach ($formats as $format) {
-        $url = sprintf('%s/%s/%s/%s,%s.%d.%s', $cachePath, $parts[0], $parts[1], $fileBasename, $format, $image['file_modified_on'], $fileExtension);
+        $url = sprintf('%s/i.php?/%s/%s/%s,%s.%d.%s', $publicURL, $parts[0], $parts[1], $fileBasename, $format, $image['file_modified_on'], $fileExtension);
         
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
