@@ -28,7 +28,7 @@ $publicURL = '';
  */
 
 $storageDir = sprintf('%s%sstorage%s',       $rootDir,    DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
-$configDir  = sprintf('%s%sconfiguration%s', $storageDir, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
+$configDir  = sprintf('%sconfiguration%s', $storageDir, DIRECTORY_SEPARATOR);
 $cachePath  = sprintf('%s/storage/cache/images', $publicURL);
 
 $databaseConfigFile = sprintf('%sdatabase.php', $configDir);
@@ -39,7 +39,7 @@ if (!file_exists($databaseConfigFile)) {
 	exit(1);
 }
 
-require($databaseConfigFile);
+$KOKEN_DATABASE = require($databaseConfigFile);
 
 try {
     $pdo = new PDO(sprintf('mysql:dbname=%s;host=%s', $KOKEN_DATABASE['database'], $KOKEN_DATABASE['hostname']), $KOKEN_DATABASE['username'], $KOKEN_DATABASE['password']);
